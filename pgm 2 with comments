@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Change to the root directory
+cd /
+
+# Print a message indicating the stopping of the Batch module
+echo "Stopping Batch module..."
+
+# Set the application home directory
+appHome=$(pwd)
+
+# Find and kill the existing process for the application
+pid=$(ps aux | grep 'app' | grep -v grep | awk '{print $2}')
+kill -9 $pid
+
+# Check if the 'nohup.out' file exists and remove it
+echo "Removing nohup.out file...."
+if [ -e bin/nohup.out ]; then
+    rm bin/nohup.out
+fi
+
+# Change to the 'standalone/log/' directory
+cd standalone/log/
+
+# Get the current timestamp
+timeNow=$(date +"%y-%m-%d_%H")
+
+# Change back to the 'bin' directory in the application home
+cd $appHome/bin
+
+# Print a message indicating the restarting of the application
+echo "Restarting Applicationâ¦."
+
+# Start the application using 'nohup' and 'standalone.sh'
+nohup ./standalone.sh -bmanagement=127.0.0.1 -bo.o.o.o &
+
+# Sleep for 5 seconds
+sleep 5
